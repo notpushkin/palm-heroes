@@ -21,7 +21,7 @@ under the License.
 #include "stdafx.h"
 #include "serialize.h"
 
-#include "xxc/xxc.security.h"
+
 
 /*
  *	

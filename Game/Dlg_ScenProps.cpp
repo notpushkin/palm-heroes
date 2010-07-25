@@ -199,13 +199,6 @@ void iScenPropsDlg::iCMDH_ControlCommand(iView* pView, CTRL_CMD_ID cmd, sint32 p
 			m_scProps.m_Players[xx].m_Type = m_btnPlayers[xx]->PlayerType();
 			m_scProps.m_Players[xx].m_Nation = m_btnNations[xx]->PlayerNation();
 		}
-		// ANTIHACK! prevents initialization if KIOCTL is FAKE!
-#if defined(NEED_REGISTRATION) && defined(OS_WINCE)
-	if ( xxc::no_jump_hwid_antihack(NULL) ) {
-		check( 0 );
-		uid = DRC_CANCEL;
-	}
-#endif
 		// -------------
 
 		// End dialog

@@ -23,7 +23,6 @@ under the License.
 #	define new DEBUG_NEW
 #endif
 
-#include "xxc/wce.detects.h"
  
 
 /*
@@ -210,15 +209,6 @@ void iBattleMember_MapEvent::OnLose(iBattleResult br)
 iBattleMember_MapGuard::iBattleMember_MapGuard(iMapGuard* pMapGuard)
 : iBattleMember(MapGuard, Defender, iFurtSkills()), m_pMapGuard(pMapGuard)
 {
-	// TRICK: double number of guards as a time goes by
-	uint32 dayParam = (1 + gGame.Map().GameDay() / 11);
-	m_Army.At(0) = pMapGuard->Creatures();
-	if ( (dayParam > 1) 
-			&& (gGame.Map().Rand(7) < 4)  // note - this is a sections number
-			&& ((113 * xxc::check_sections_pe() + 1) < 679) ) {
-
-		m_Army.At(0).Count() *= dayParam;
-	}
 }
 
 void iBattleMember_MapGuard::OnPrepare(iBattleMember* pEnemy)

@@ -22,10 +22,6 @@ under the License.
 #include "helpers.h"
 #include "Dlg_TimeEvent.h"
 #include "lzo.h"
-#include "xxc/xxc.app.h"
-#include "xxc/xxc.file.h"
-
-#include "xxc/xxc.security.h"
 
 //////////////////////////////////////////////////////////////////////////
 const sint32 SCR_DIFMODIF[DFC_COUNT] = { 70, 100, 120, 140, 160 };

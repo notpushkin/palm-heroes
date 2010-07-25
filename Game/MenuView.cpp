@@ -26,7 +26,7 @@ under the License.
 #include "Dlg_ScenProps.h"
 #include "Dlg_HallOfFame.h"
 
-#include "xxc/xxc.security.h"
+
 
 /*
  *	Main dialog
@@ -149,14 +149,6 @@ void iMenuView::Start()
 		iMainMenuDlg mdlg(&gApp.ViewMgr());
 		sint32 res = mdlg.DoModal();
 
-	// TRICK!
-	// always return 'Exit game' if bloom bits are incorrect
-	uint32 bloomHash = (uint32)(xxc::store_find( XXC_GET_SEC(), SEC_BLOOMHASH )->data);
-#if defined(NEED_REGISTRATION) 
-	// this is a debug check!
-	check( bloomHash == BLOOMBITS_HASH );
-	if ( (bloomHash ^ BLOOMBITS_HASH) != 0 )  res = 104;
-#endif
 
 		if (res == 100) {
 			// Start new game

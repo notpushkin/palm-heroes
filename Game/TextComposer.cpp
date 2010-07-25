@@ -20,7 +20,7 @@ under the License.
 
 #include "stdafx.h"
 #include "lzo.h"
-#include "xxc/xxc.app.h"
+
 
 //////////////////////////////////////////////////////////////////////////
 static const iCharW CCODE = '#';

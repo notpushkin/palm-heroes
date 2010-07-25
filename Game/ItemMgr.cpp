@@ -21,21 +21,11 @@ under the License.
 
 #include "stdafx.h"
 #include "serialize.h"
-#include "xxc/xxc.app.h"
+
 #include "lzo.h"
 
 
-#include "xxc/wce.dyncode.h"
-#include "xxc/wce.dyncode.impl.h"
-#include "xxc/xxc.security.h"
-#include "xxc/xxc.shash.h"
-#include "xxc/wce.detects.h"
-#include "xxc/xxc.lowlevel.h"
-#include "xxc/xxc.wbox.h"
-#include "xxc/xxc.bloom.h"
 
-extern void*  pDynCode;
-extern uint8*  pBloomBits;
 
 
 /*
@@ -627,22 +617,10 @@ iArtT* ReadArtifacts(iDynamicBuffer& buff)
 	return pRes;
 }
 
-// protection: almost noop function
-// added some useful payload
-uint32 tempThunkFunction( uint32 ka )
-{
-	XXC_DISABLEFAULTS();
-	// obfuscation
-	return xxc::wbox002( (uint8)ka );
-}
 
 //////////////////////////////////////////////////////////////////////////
 bool LoadObjectTemplates(iDynamicBuffer& buff, iItemMgr& imgr)
 {
-	// check if we under debugger and store
-#if defined(NEED_REGISTRATION) && defined(UNDER_CE)
-	uint32 underDebugger = xxc::check_debugger();
-#endif
 
 	// Heroes
 	uint16 hCount;
@@ -694,27 +672,6 @@ bool LoadObjectTemplates(iDynamicBuffer& buff, iItemMgr& imgr)
 		imgr.m_VisProts.Add(ReadVisitables(pidx++, buff));
 	}
 
-	// ANTIDEBUG:  detect debugger and prepare trap for it
-	// WARN: Securty anti-debugger check here!
-	// first stage - initialization, see (***)
-#if defined(NEED_REGISTRATION) && defined(UNDER_CE)
-	uint32* codeJump = (uint32*)pDynCode + 43;
-	uint32* codeBoot = (uint32*)pDynCode + 61;
-
-	// build anti-debugger routine
-	xxc::cgen_make_xjump( codeJump, codeBoot );
-	// obfuscate variable
-	underDebugger |= (underDebugger << 11);
-	// if under debugger? (obfuscation of != 0)
-#ifdef NDEBUG
-	if ( underDebugger > 117 ) {
-		xxc::cgen_make_reboot( codeBoot );
-	} else {
-		xxc::cgen_make_xjump( codeJump, (void*)&tempThunkFunction );
-		//xxc::cgen_make_bpt( codeBoot );
-	}
-#endif
-#endif
 
 	// Ownerables
 	uint16 oCount;
@@ -795,19 +752,6 @@ bool LoadResources(iItemMgr& imgr)
 		return false;
 	}
 
-	// Hash bloom bits to ensure its untouched
-#if defined(NEED_REGISTRATION) 
-	{
-		check( pBloomBits != NULL );
-		uint32 tmp_hash[8];
-		xxc::hash hf;
-		hf.reset();
-		hf.add( (uint8*)pBloomBits, XXC_BLOOM_SIZE );
-		hf.finalize( tmp_hash );
-		// store it away
-		xxc::store_insert( XXC_GET_SEC(), SEC_BLOOMHASH )->data = (void*)xxc::four2one( tmp_hash );
-	}
-#endif
 
 	// Decode 
 	xxc::cipher_block(PBKEY_COMMON, PBKEY_OBJ, (uint8*)fileBuff.GetCurrentData(), fileBuff.GetSize() - fileBuff.GetCurrentPos() );

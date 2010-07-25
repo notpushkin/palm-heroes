@@ -31,15 +31,6 @@ under the License.
 #include "InteractBattle.h"
 #include "Dlg_HallOfFame.h"
 
-#include "xxc/xxc.gf2.h"
-#include "xxc/xxc.bloom.h"
-#include "xxc/xxc.app.h"
-#include "xxc/xxc.file.h"
-
-#include "xxc/wce.dyncode.h"
-#include "xxc/wce.dyncode.impl.h"
-
-#include "xxc/xxc.security.h"
 
 extern void*  pDynCode;
 extern uint8* pBloomBits;
@@ -83,24 +74,6 @@ iGame::~iGame()
 	Cleanup();
 }
 
-// workaround compiler problem
-static void setup_serial_( uint32 serial )
-{
-	uint32 keys[4];
-	uint8* bitsPointer = pBloomBits;
-	uint32 mnum = xxc::bloom_probe( bitsPointer, serial );
-	xxc::scramble_magic( PBKEY_COMMON, mnum, keys );
-	gSettings.SetMagicNumbers(keys);
-}
-
-static uint32 do_antidbg_call()
-{
-	uint32 some_fake_data = 0x882;
-	some_fake_data  <<= 1;
-#if defined(UNDER_CE)
-	return ((uint32(WINAPI*)(int))pDynCode)(some_fake_data);
-#endif
-}
 
 bool iGame::Init(const iStringT& fname)
 {
@@ -114,24 +87,6 @@ bool iGame::Init(const iStringT& fname)
 	// Validate Activation Key
 	if (gSettings.HasActivationKey()) {
 
-//		xxc::init();
-//		FILE* f = fopen("activation.txt","wt");
-//		fprintf( f, "%ls\n", gSettings.GetActivationKey().CStr() );
-		uint32 serial = xxc::ProcessActivationKey(gSettings.GetActivationKey().CStr());
-//		fprintf( f, "%08x\n", serial );
-		if (serial) {
-			gSettings.SetGameSN(serial);
-			localyRegistered = (localyRegistered-12)*31415;
-			localyRegistered >>= 2;
-			//gRegistered = true;
-			gSettings.Save();
-			SET_REGISTERED();
-		} else {
-			gSettings.SetActivationKey(iStringT());
-		}
-		// pBloomBits already loaded
-//		fprintf( f, "%08x : %08x\n", pBloomBits, serial );
-//		fflush(f);
 		setup_serial_( serial );
 ///		uint32 mnum = xxc::bloom_probe( pBloomBits, serial );
 //		fprintf(f, "probe: %08x\n",  mnum );

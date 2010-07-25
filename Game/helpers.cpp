@@ -18,7 +18,6 @@ under the License.
 */   
 
 #include "stdafx.h"
-#include "xxc/xxc.file.h"
 
 //////////////////////////////////////////////////////////////////////////
 struct RAND_QUANTITY_ITEM {

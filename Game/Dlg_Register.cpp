@@ -19,11 +19,7 @@ under the License.
 
 #include "stdafx.h"
 #include "Dlg_Register.h"
-#include "xxc/xxc.cfg.h"
-#include "xxc/xxc.shash.h"
-#include "xxc/xxc.hwid.h"
 
-#include "xxc/xxc.sysinfo.h"
 #define MICROSOFT_EMULATOR_ID 0x3940622c
 extern uint32 gOemInfoHash;
 

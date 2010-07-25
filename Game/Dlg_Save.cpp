@@ -20,7 +20,6 @@ under the License.
 #include "stdafx.h"
 #include "Dlg_Save.h"
 #include "helpers.h"
-#include "xxc/xxc.file.h"
 
 /*
  *	

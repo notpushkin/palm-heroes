@@ -23,12 +23,6 @@ under the License.
 #include "gxl.power.h"
 #include "Dlg_Register.h"
 
-#include "xxc/xxc.dllfn.h"
-#include "xxl.guard.h"
-#include "xxc/xxc.sysinfo.h"
-#include "xxc/wce.dyncode.h"
-#include "xxc/xxc.security.h"
-#include "xxc/wce.detects.h"
 //
 #include <stdlib.h> 
 #include "IntroDlg.h"
@@ -188,43 +182,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpstrC
 		MessageBox( GetForegroundWindow(), _T("Not enough mana found!"), _T("Startup error"), MB_OK );
 		return 0;
 	}
-
-	// Load Core DLL
-	// NB: Note extensive use of the scoped handle and ptr guards!
-	pCoreHandle = (HMODULE*)malloc(sizeof(HANDLE));
-	scope_guard guardHandPtr = make_guard( free, pCoreHandle );
-	*pCoreHandle = LoadLibrary(L"coredll.dll");
-	scope_guard guardHandLib = make_guard( FreeLibrary, *pCoreHandle );
-	pSecNum = (uint32*)malloc(sizeof(uint32));
-	scope_guard guardSecPtr = make_guard( free, pSecNum );
-	*pSecNum = 0;
-
-	// initialize area for dynamic code generator
-	pDynCode = xxc::cgen_alloc();
-	scope_guard guardDynCode = make_guard( xxc::cgen_free, pDynCode );
-
-
-	// initialize security system
-	xxc::sec_initialize();
-	scope_guard guardSecData = make_guard( xxc::sec_finalize );
-
-	// initialize system info
-	gOemInfoHash = xxc::dev_acquire( gDevInfo );
-
-	// store oeminfo hash into sec
-	xxc::store_insert( xxc::sec_pointers[0], SEC_OEMHASH )->data = (void*)(gOemInfoHash);
-
-	// call jump module initialization
-	XXC_JUMPID_( xxc::sec_pointers[12], SEC_FN_INIT, xxc::sec_pointers[22] );
-
-	// NB: Now check is performed at the iWindow class - i.e. if creation fails 
-	// - other app instance is running (we don't know wndClass name here)
-//// Check second instance of the game
-//   HANDLE hMutex = CreateMutex( NULL, TRUE, _T("PocketHeroesSingleInstanceMutex") );
-//   if ( GetLastError() == ERROR_ALREADY_EXISTS ) {
-//       return TRUE;
-//   }
-//   scope_guard guardAppMutex = make_guard( CloseHandle, hMutex );
 
 	// Root, Save and Maps folders
 	iFileName::GetAppPath(gRootPath);

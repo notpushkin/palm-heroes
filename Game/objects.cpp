@@ -27,7 +27,7 @@ under the License.
 #include "Dlg_Recruit.h"
 #include "Dlg_Rewards.h"
 
-#include "xxc/wce.detects.h"
+
 
 //////////////////////////////////////////////////////////////////////////
 iMapItem::iMapItem(const iPoint& pos, MAP_ITEM_TYPE mit, const SpriteId& sid)

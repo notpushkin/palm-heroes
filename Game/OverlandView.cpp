@@ -28,7 +28,7 @@ under the License.
 #include "dbg.h"
 #include "helpers.h"
 
-#include "xxc/xxc.security.h"
+
 
 const iRect OVERLAND_POPUP_BOUND(14,28,292,176);
 

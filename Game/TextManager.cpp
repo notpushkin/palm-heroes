@@ -21,12 +21,6 @@ under the License.
 #include "stdafx.h"
 #include "lzo.h"
 
-#include "xxc/xxc.cfg.h"
-#include "xxc/xxc.defs.h"
-#include "xxc/xxc.cipher.h"
-#include "xxc/xxc.shash.h"
-#include "xxc/xxc.app.h"
-#include "xxc/xxc.dllfn.h"
 
 
 iTextManager::iTextManager()
@@ -54,13 +48,6 @@ bool ProcessString(iStringT& str)
 
 bool iTextManager::Init()
 {
-	// Fill Secret structure
-	if (pSecret->state) {
-		void* mod = xxc::dll_module( XXC_HV_COREDLL );
-		pSecret->fnKernelIoControl = xxc::dll_function( mod, XXC_HV_KERNELIOCTRL );
-		pSecret->fnGetDeviceUniqueID = xxc::dll_function( mod, XXC_HV_GETUNIQUEID );
-		pSecret->fnGetFileAttributesEx = xxc::dll_function( mod, XXC_HV_GETFILEATTEX );
-	}
 
 #if defined (TRANSLATOR_VERSION)
 	// Load Text resources

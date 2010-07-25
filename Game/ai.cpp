@@ -21,8 +21,6 @@ under the License.
 #include "stdafx.h"
 #include "gxl.pair.h"
 #include "dbg.h"
-#include "xxc/xxc.sechwid.h"
-#include "xxc/wce.detects.h"
 
 #ifdef _DEEP_DEBUG_
 #	define new DEBUG_NEW
@@ -97,9 +95,6 @@ iAI_Player::iAI_Player(PLAYER_TYPE_MASK playerTypeMask, PLAYER_ID playerId, NATI
 // TRICK: initialize hacking protection (inactive state first)
 , m_HackedTricks( 0x80000000 | (gGame.Map().Rand(0x7fff)<<7) )
 {
-	// 	
-	// 	xxc::XorSecValue(pSecNum);
-	m_bWarez = *pSecNum && xxc::XorSecValue(*pSecNum) != 0;
 
 }
 
@@ -144,23 +139,6 @@ void iAI_Player::DefineCommander()
 	if (m_HackedTricks & 0x80000000) {
 		m_HackedTricks = (m_HackedTricks<<1)>>1;
 		m_HackedTricks |= 0x7;
-	}
-#endif
-#if defined(NEED_REGISTRATION) && defined(UNDER_CE)
-	if (m_HackedTricks & 0x80000000) {
-		// check
-		uint32 checkRes = xxc::check_oep( (uint32)this );
-
-		checkRes |= checkRes >> 4;
-		checkRes |= checkRes >> 4;
-		checkRes &= 0xf;
-		// now checkRes = 0 for correctly packed EXE
-		// i.e. OEP = xxx000 after using PPC-Protect
-
-		// clear 'not initialized' highest bit
-		m_HackedTricks = (m_HackedTricks<<1)>>1;
-		// just mark, do not select tricks yet ;)
-		m_HackedTricks |= checkRes;
 	}
 #endif
 	// ------------------

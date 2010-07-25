@@ -20,7 +20,6 @@ under the License.
 #include "stdafx.h"
 #include "GameMenuDlg.h"
 
-#include "xxc/xxc.security.h"
 
 //Settings, Save game, Main menu, Quit, Return to game
 iGameMenuDlg::iGameMenuDlg(iViewMgr* pViewMgr)

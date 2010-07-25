@@ -22,7 +22,6 @@ under the License.
 #include "Dlg_Settings.h"
 #include "helpers.h"
 
-#include "xxc/xxc.security.h"
 
 //////////////////////////////////////////////////////////////////////////
 iFramePopupView::iFramePopupView(iViewMgr* pViewMgr, PLAYER_ID pid)
